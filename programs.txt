@@ -1,0 +1,88 @@
+ ------------ p1 
+
+-- max of 3 numbers
+#
+var ~a :: int
+var ~b :: int
+var ~c :: int
+const ~d :: str = 'Max number is:'
+print('Input a:')
+read(~a)
+print('Input b:')
+read(~b)
+print('Input b:')
+read(~c)
+
+if ~a > ~b & ~a > ~c{
+	print(~d, ~a)
+}else{
+	if ~b > ~a & ~b > ~c{
+		print(~d, ~b)
+	}else{
+		print(~d, ~c)
+	} 
+}
+#
+
+------------ p2
+
+-- check prime
+
+#
+var ~a :: int
+var ~d :: int = 2
+var ~prime :: int = 1
+
+asla[~d < ~a/2]{
+	if ~a % ~d == 0{
+		~prime := 0
+	}
+	~d +:= 1
+} 
+
+print('prime:', ~prime)
+#
+
+
+------------- p3
+
+-- sum of n numbers
+
+#
+var ~sum :: int = 0
+var ~n :: int = 10
+var ~a :: arr[int 10]
+var ~i :: int
+
+read(~a)
+
+for[~i := 1, ~i <= ~n, ~i +:=1]{
+	~sum +:= ~a[~i]
+}
+
+print(~sum)
+
+------------ p1err
+
+#
+var .a :: int   => lexical error identifier cannot start with .
+var ~b :: int
+var ~c :: int
+const ~d :: str = 'Max number is:'
+print('Input a:')
+read(~a)
+print('Input b:')
+read(~b)
+print('Input b:')
+read(~c)
+
+if ~a > ~b &@ ~a > ~c{   => lexical error @ not supported 
+	print(~d, ~a)
+}else{
+	if ~b > ~a & ~b > ~c{
+		print(~d, ~b)
+	}else{
+		print(~d, ~c)
+	} 
+}
+#

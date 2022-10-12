@@ -1,0 +1,65 @@
+<program> ::= #<stmtList>#
+
+<stmtList> ::= <stmt> | <stmt><stmtList>
+
+<stmt> ::= <simpleStmt> | <structStmt> 
+
+<simpleStmt> ::= <declaration> | <iostmt> | <assignstmt> 
+
+<declaration> ::= var <identifier> :: <type> | var <identifier> :: <type> = <const>
+
+<const> ::= <char> | <int> | <str>
+
+<type> ::= <simpleType> | <arrayType>
+
+<simpleType> ::= char | int | str
+
+<arrayType> ::= arr[<simpleType> <unsignedNumber>]
+
+<iostmt> ::= read (<identifier>) | print (<identifierList>) | print (<const>)
+
+<identifierList> ::= <identifier> | <identifier>,<identifierList>
+
+<simpleAssignOp> ::= :=
+
+<specialAssignOp> ::= +:= | -:=
+
+<simpleAssign> ::= <identifier> <simpleAssignOp> <expression> 
+
+<specialAssign> ::= <identifier> <specialAssignOp> <const> 
+
+<assignstmt> ::= <simpleAssign> | <specialAssign>
+
+<expression> ::= <expression> <secOrdOp> <term> | <term>
+
+<secOrdOp> ::= + | -
+
+<term> ::= <term> <firstOrdOp> <factor> | <factor>
+
+<firstOrdOp> ::= * | /
+
+<factor> ::= (<expression) | <identifier> | <arrAccess> | <const>
+
+<arrAccess> ::= <identifier>[<identifier>] | <identifier>[<unsignedNumber>]
+
+<structStmt> ::= <compoundStmt> | <ifstmt> | <whilestmt> | <forstmt>
+
+<compoundStmt> ::= {<stmtList>}
+
+<ifstmt> ::= if <compoundCond> <stmt> else <stmt>
+
+<whilestmt> ::= asla <compoundCond> <stmt>
+
+<compoundCond> ::= <condition> | <condition> <logicOp> <compoundCond>
+
+<logicOp> ::= & | |
+
+<condition> ::= <expression> <relation> <expression>
+
+<relation> ::= < | <= | == | != | >= | >
+
+<forstmt> ::= for[<initStmt>,<compoundCond>,<operationAssignStmt>] <stmt>
+
+<initStmt> ::= <identifier> = <const>
+
+<operationAssignStmt> ::= <identifier> <specialAssignOp> <const>
