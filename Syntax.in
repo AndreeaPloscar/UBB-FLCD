@@ -63,3 +63,22 @@
 <initStmt> ::= <identifier> = <const>
 
 <operationAssignStmt> ::= <identifier> <specialAssignOp> <const>
+
+<identifier> ::= ~<sequence>
+<sequence> ::= <character> | <character><sequence>
+<character> ::= <letter>|<digit>
+<letter> ::= A|B|...|Z|a...|z
+<digit> ::= 0|1|...|9
+
+<sign> ::= -|+
+<zero> ::= 0
+<nonzeroDigit> ::= 1|2|3|4 … |9
+<digit_seq> ::= <digit> | <digit><digit_seq>
+<unsignedNumber> ::= <nonzeroDigit> | <nonzeroDigit><digit_seq>
+<int> ::= <zero> |  <sign><unsignedNumber> | <unsignedNumber>
+
+<strSequence> ::= <chr> | <chr><strSequence>
+<chr> ::= <letter>|<digit>|.
+<str> ::= "<strSequence>"
+
+<char> ::= '<character>'
