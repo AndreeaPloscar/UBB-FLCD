@@ -1,0 +1,21 @@
+Symbol Table documentation
+
+- link to github: https://github.com/AndreeaPloscar/UBB-FLCD
+
+- implemented in Java as a Hash Table
+
+- private fields: 
+	- nrElements -> number of existing elements in the hash table
+	- size -> number of buckets in the hash table
+	- elements -> array of buckets, each bucket containing elements
+
+- methods:
+	- List<Object>[] getElements() -> returns all elements in the hash table
+	- int hashFunction(Object element) -> returns the value of the hash function for given element (can be Integer/String). Used hash function is: sum of ascii codes % size. 
+	- void resize() -> resizes the hash table, doubling the number of buckets. Reinserts each element in the hash table reaplying the hash function.
+	- AbstractMap.SimpleEntry<Integer, Integer> getIdentifierPosition(Object element) -> returns a pair with the number of the bucket containing the element on the first position and the index in the list contained by the bucket on the second position if the element exists in the hash table and the pair (-1,-1) otherwise
+	- AbstractMap.SimpleEntry<Integer, Integer> addElement(Object element) -> adds the element in the hash table if it does not exist. Returns the position where the element is located as a pair (bucket, index in bucket); If the number of existing elements in the hash table is larger than 2 * number of buckets, the hash table is resized before adding the element.
+
+
+- In order to be able to add both identifiers and constant into ST, I used Object as the type of the elements in the hash table. I check the type of the element when i apply the hash function on it, and for Integers i decided to transform them into a string and apply the sum on ascii codes on this created string. When searching for an element in the hash table, it matters the type also, so the integer constant 5 will not be equal to the string "5". 
+
