@@ -21,12 +21,12 @@ public class ST {
         return elements;
     }
 
-    private int hashFunction(Object identifier) {
+    private int hashFunction(Object element) {
         Integer f = -1;
-        if(identifier instanceof String) {
-             f = ((String)identifier).chars().reduce(Integer::sum).orElseThrow();
-        }else if(identifier instanceof Integer){
-            f = (((Integer)identifier).toString()).chars().reduce(Integer::sum).orElseThrow();
+        if(element instanceof String) {
+             f = ((String)element).chars().reduce(Integer::sum).orElseThrow();
+        }else if(element instanceof Integer){
+            f = (((Integer)element).toString()).chars().reduce(Integer::sum).orElseThrow();
         }
         return f % this.size;
     }
@@ -48,27 +48,27 @@ public class ST {
         this.elements = newElements;
     }
 
-    private AbstractMap.SimpleEntry<Integer, Integer> getIdentifierPosition(Object identifier) {
+    private AbstractMap.SimpleEntry<Integer, Integer> getIdentifierPosition(Object element) {
         var position = new AbstractMap.SimpleEntry<>(-1,-1);
-        var bucket = this.hashFunction(identifier);
+        var bucket = this.hashFunction(element);
         for(var i = 0; i < this.elements[bucket].size(); i ++){
-            var element = this.elements[bucket].get(i);
-            if(element.equals(identifier)){
+            var el = this.elements[bucket].get(i);
+            if(el.equals(element)){
                 position = new AbstractMap.SimpleEntry<>(bucket, i);
             }
         }
         return position;
     }
 
-    public AbstractMap.SimpleEntry<Integer, Integer> addIdentifier(Object identifier) {
-        AbstractMap.SimpleEntry<Integer, Integer> existingPosition = getIdentifierPosition(identifier);
+    public AbstractMap.SimpleEntry<Integer, Integer> addElement(Object element) {
+        AbstractMap.SimpleEntry<Integer, Integer> existingPosition = getIdentifierPosition(element);
         if(existingPosition.equals(new AbstractMap.SimpleEntry<>(-1,-1))){
             if(this.nrElements > this.size * 2 ){
                 this.resize();
             }
-            var bucket = this.hashFunction(identifier);
+            var bucket = this.hashFunction(element);
             var posInBucket = this.elements[bucket].size();
-            this.elements[bucket].add(identifier);
+            this.elements[bucket].add(element);
             existingPosition = new AbstractMap.SimpleEntry<>(bucket, posInBucket);
             this.nrElements +=1 ;
         }
