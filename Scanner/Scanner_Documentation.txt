@@ -1,0 +1,33 @@
+------ Scanner Documentation --------
+
+
+Regex patterns used:
+	* string constants ^\"[a-zA-Z.0-9]*\"$
+		-> matches any string that starts and ends with " and contains any number (0 or more times) of small and capital letters, digits and the dot character between the ""
+	* char constants ^\'[a-zA-Z.0-9]\'*$
+		-> the pattern amtches any string that starts and ends with ' and contains one single character between '', being a small or capital letter, digit or the dot character
+	* integer constants ^[+\-]?[1-9][0-9]*|0$
+		-> the pattern matches 0 or a sequence of digits with the following properties:
+			- starts with + - or withoout a sign
+			- the first digit is non zero
+			- there are 0 or more digits (including 0) after the first digit
+	* identifiers ^~[a-zA-Z0-9]+$ 
+		-> matches a string startig with ~ followed by one or more digits/small letters/capital letters
+
+PIF data structure:
+
+	- a list of PifElements
+	- PifElement:
+		- contains the token and the position of the token in ST as a <Integer,Integer> pair, or (-1,-1) if the token is not an identifier/constant
+	- provides the methods:
+		- void addToken(String token, Map.Entry<Integer, Integer> pos)
+				=> adds a PifElement to the end of PIF, containing the token and the given position
+		- void reorganize(Map<Map.Entry<Integer, Integer>, Map.Entry<Integer, Integer>> newPositions)
+				=> received a map of positions that need tp be updated in the PIF. It is used after a resize of ST, when the positions in ST are changed, so the positions in PIF must also be updated to reflect these chnges. 
+				=> iterates over elements in PIF and for identifiers and constants updates the position inside the PifElement to the one received in the map
+				=> the positions of PifElements inside the pif remain unchanged
+		- String toString()
+				=> creates a structured string used for printing the pif in the output file
+
+
+
