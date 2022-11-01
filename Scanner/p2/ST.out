@@ -1,0 +1,5 @@
+ST structure: hash table
+0 => 0: 0 | 
+1 => 0: 1 | 1: "Prime" | 
+2 => 0: ~d | 1: 2 | 
+3 => 0: ~a | 1: ~prime | 

@@ -50,6 +50,7 @@ public class ST {
             }
         }
         this.elements = newElements;
+
         return positionsTranformed;
     }
 

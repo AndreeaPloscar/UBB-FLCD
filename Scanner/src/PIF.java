@@ -18,8 +18,11 @@ public class PIF {
 
     public void reorganize(Map<Map.Entry<Integer, Integer>, Map.Entry<Integer, Integer>> newPositions){
         for (var element : elements) {
-            if (Objects.equals(element.token, "const") | Objects.equals(element.token, "id")) {
+            if (Objects.equals(element.token, "CONST") | Objects.equals(element.token, "ID")) {
                 element.position = newPositions.get(element.position);
+                if(element.position == null){
+                    System.out.println("null");
+                }
             }
         }
     }
@@ -28,6 +31,9 @@ public class PIF {
     public String toString() {
         StringBuilder result = new StringBuilder();
         for (var element: elements) {
+            if(element.position == null){
+                System.out.println("null");
+            }
             result.append(element.token).append(" [").append(element.position.getKey()).append(", ").append(element.position.getValue()).append("]\n");
         }
         return result.toString();

@@ -1,0 +1,5 @@
+ST structure: hash table
+0 => 0: ~b | 1: "Input.b" | 
+1 => 0: ~c | 1: "Input.c" | 
+2 => 0: ~d | 
+3 => 0: "Input.a" | 1: ~a | 
