@@ -31,3 +31,25 @@ PIF data structure:
 
 
 
+Finite Automata
+
+
+- contains states, initialState, finalStates, alphabet and transitions
+
+
+- methods:
+	- List<String> splitLine(String line)
+		* splits a String into a list of characters checking if each one is a letter or a digit, throws an error otherwise
+	- List<String> splitUnchecked(String line)
+		* splits a String into a list of characters with no checks
+	- void loadTransitions(List<String> transitions)
+		* loads the transitions from the input, checking if the states belong to the states of the FA and the elements are in the alphabet
+	- boolean isDFA() 
+		* checks if FA is deterministic, searching for two transitions with the same source and element. if such transitions are found, returns false, otherwise true
+	- Boolean isAccepted(String sequence)
+		* checks if given sequence is accepted by the DFA, returns a boolean value
+	- void readFromFile(String fileName)
+		* loads the DFA from a file structured as mentioned in fa_bnf.txt
+
+
+FA is used in the scanner to check if identifiers and integer constants belong to the language. It replaces the previously used regex expressions.
