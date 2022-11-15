@@ -6,6 +6,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Scanner;
 import java.util.StringTokenizer;
 import java.util.regex.Pattern;
 
@@ -121,18 +122,25 @@ public class FA {
 
     public void readFromFile(String fileName) {
         Path file = Paths.get(fileName + ".in");
-        Charset charset = StandardCharsets.UTF_8;
+        Scanner fileScanner = null;
+        List<String> lines;
         try {
-            List<String> lines = Files.readAllLines(file, charset);
-            this.states = splitLine(lines.get(0));
-            this.initialState = splitLine(lines.get(1)).get(0);
-            this.finalStates = splitLine(lines.get(2));
-            this.alphabet = splitUnchecked(lines.get(3));
-            loadTransitions(lines.subList(4, lines.size()));
-        } catch (IOException ex) {
-            System.out.format("I/O error: %s%n", ex);
-        } catch (FaTokenException e) {
-            System.out.println(e.getMessage());
+            fileScanner = new Scanner(file);
+            try {
+                if(fileScanner.hasNextLine()) {
+                    lines = new ArrayList<>(List.of(fileScanner.nextLine().split(";")));
+                }
+                else throw new FaTokenException("File is empty");
+                this.states = splitLine(lines.get(0));
+                this.initialState = splitLine(lines.get(1)).get(0);
+                this.finalStates = splitLine(lines.get(2));
+                this.alphabet = splitUnchecked(lines.get(3));
+                loadTransitions(lines.subList(4, lines.size()));
+            } catch (FaTokenException e) {
+                System.out.println(e.getMessage());
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
         }
 
     }

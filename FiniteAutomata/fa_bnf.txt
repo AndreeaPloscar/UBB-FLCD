@@ -1,10 +1,10 @@
-<endl> ::= <\n>
-<fa> ::= <states><endl><initialState><endl><finalStates><endl><alphabet><endl><transitions>
+<separator> ::= ;
+<fa> ::= <states><separator><initialState><separator><finalStates><separator><alphabet><separator><transitions>
 <state> ::= a|b|...|z|A|..|Z|0|..|9
 <states> ::= <state> | <state> <states>
 <initialState> ::= <state>
 <finalStates> ::= <state> | <state> <finalStates>
 <alphabet> ::= <element> | <element> <alphabet>
-<element> ::= a|b|...|z|A|..|Z|0|..|9|
-<transitions> ::= <transition> | <transition><endl><transitions>
+<element> ::= a|b|...|z|A|..|Z|0|..|9|.|~|+|-|...
+<transitions> ::= <transition> | <transition><separator><transitions>
 <transition> ::= <state> <element> <state>
