@@ -4,7 +4,7 @@
 Regex patterns used:
 	* string constants ^\"[a-zA-Z.0-9]*\"$
 		-> matches any string that starts and ends with " and contains any number (0 or more times) of small and capital letters, digits and the dot character between the ""
-	* char constants ^\'[a-zA-Z.0-9]\'*$
+	* char constants ^\'[a-zA-Z.0-9]\'$
 		-> the pattern amtches any string that starts and ends with ' and contains one single character between '', being a small or capital letter, digit or the dot character
 	* integer constants ^[+\-]?[1-9][0-9]*|0$
 		-> the pattern matches 0 or a sequence of digits with the following properties:
