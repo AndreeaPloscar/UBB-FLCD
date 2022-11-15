@@ -1,3 +1,5 @@
+package FA;
+
 import java.io.IOException;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
@@ -75,7 +77,7 @@ public class FA {
                 throw new FaTokenException("element in transition " + i + "is not in the alphabet");
             }
             if(!this.states.contains(splittedTransition.get(0)) || !this.states.contains(splittedTransition.get(2))){
-                throw new FaTokenException("state in transition " + i + "is not a state of this FA");
+                throw new FaTokenException("state in transition " + i + "is not a state of this FA.FA");
             }
             this.transitions.add(new Transition(splittedTransition));
         }

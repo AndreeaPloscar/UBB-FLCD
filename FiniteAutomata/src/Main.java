@@ -37,6 +37,17 @@ public class Main {
                 e.printStackTrace();
             }
             switch (option){
+                case "1":{
+                    System.out.println("file >> ");
+                    String file = "";
+                    try {
+                        file = reader.readLine();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                    fa.readFromFile(file);
+                    break;
+                }
                 case "2":{
                     System.out.println("is DFA? " + fa.isDFA());
                     break;

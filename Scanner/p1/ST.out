@@ -1,5 +1,5 @@
 ST structure: hash table
-0 => 0: ~b | 1: "Input.b" | 
+0 => 0: "Input.b" | 1: ~b | 
 1 => 0: ~c | 
 2 => 0: ~d | 
 3 => 0: ~a | 1: "Max.number.is" | 2: "Input.a" | 

@@ -1,3 +1,5 @@
+import FA.FA;
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
@@ -11,11 +13,18 @@ public class ProgramScanner {
     private final ST st = new ST(2);
     private final Pattern stringConstant = Pattern.compile("^\"[a-zA-Z.0-9]*\"$");
     private final Pattern charConstant = Pattern.compile("^\'[a-zA-Z.0-9]\'$");
-    private final Pattern integerConstant = Pattern.compile("^[+-]?[1-9][0-9]*|0$");
-    private final Pattern identifier = Pattern.compile("^~[a-zA-Z0-9]+$");
+//    private final Pattern integerConstant = Pattern.compile("^[+-]?[1-9][0-9]*|0$");
+//    private final Pattern identifier = Pattern.compile("^~[a-zA-Z0-9]+$");
+    private final FA integerConstantFA = new FA();
+    private final FA identifierFA = new FA();
     private final List<String> declaredTokens = new ArrayList<>();
     private final List<String> delimiters = new ArrayList<>();
     private StringBuilder message = new StringBuilder();
+
+    public ProgramScanner() {
+        integerConstantFA.readFromFile("FA_int");
+        identifierFA.readFromFile("FA_id");
+    }
 
     private void readTokens() {
         try {
@@ -112,7 +121,7 @@ public class ProgramScanner {
                     }
                     this.pif.addToken("CONST", result.getKey());
                 } else {
-                    if (integerConstant.matcher(token).matches()) {
+                    if (integerConstantFA.isAccepted(token)) {
                         var result = this.st.addElement(token);
                         if (result.getValue() != null) {
                             this.pif.reorganize(result.getValue());
@@ -126,7 +135,7 @@ public class ProgramScanner {
                             }
                             this.pif.addToken("CONST", result.getKey());
                         } else {
-                            if (identifier.matcher(token).matches()) {
+                            if (identifierFA.isAccepted(token)) {
                                 var result = this.st.addElement(token);
                                 if (result.getValue() != null) {
                                     this.pif.reorganize(result.getValue());
