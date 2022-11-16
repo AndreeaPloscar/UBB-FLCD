@@ -51,5 +51,9 @@ Finite Automata
 	- void readFromFile(String fileName)
 		* loads the DFA from a file structured as mentioned in fa_bnf.txt
 
+Transition:
+	- source
+	- element
+	- destination
 
 FA is used in the scanner to check if identifiers and integer constants belong to the language. It replaces the previously used regex expressions.

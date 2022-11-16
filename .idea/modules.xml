@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/FiniteAutomata/FiniteAutomata.iml" filepath="$PROJECT_DIR$/FiniteAutomata/FiniteAutomata.iml" />
+      <module fileurl="file://$PROJECT_DIR$/Scanner/Scanner.iml" filepath="$PROJECT_DIR$/Scanner/Scanner.iml" />
+      <module fileurl="file://$PROJECT_DIR$/SymbolTable/SymbolTable.iml" filepath="$PROJECT_DIR$/SymbolTable/SymbolTable.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/UBB-FLCD.iml" filepath="$PROJECT_DIR$/.idea/UBB-FLCD.iml" />
+    </modules>
+  </component>
+</project>
