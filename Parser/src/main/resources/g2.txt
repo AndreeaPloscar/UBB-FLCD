@@ -1,0 +1,158 @@
+!= " # & ' ( ) * + +:= , - -:= . / 0 1 2 3 4 5 6 7 8 9 :: := = == A B C D E F G H I J K L M N O P Q R S T U V W X Y Z [ ] a arr[ asla b c d e else expression) f for[ g h i if j k l m n o p print q r read s t u v var w x y z { } ~
+sign type int firstOrdOp operationAssignStmt zero whilestmt declaration compoundStmt compoundCond arrayType stmtList str stmt simpleStmt digit_seq iostmt char unsignedNumber initStmt condition relation identifier letter nonzeroDigit chr forstmt term identifierList expression specialAssign const secOrdOp assignstmt simpleAssignOp ifstmt logicOp simpleType specialAssignOp sequence strSequence program arrAccess simpleAssign digit factor character structStmt
+program
+program -> # stmtList #
+stmtList -> stmt
+stmtList -> stmt stmtList
+stmt -> simpleStmt
+stmt -> structStmt
+simpleStmt -> declaration
+simpleStmt -> iostmt
+simpleStmt -> assignstmt
+declaration -> var identifier :: type
+declaration -> var identifier :: type = const
+const -> char
+const -> int
+const -> str
+type -> simpleType
+type -> arrayType
+simpleType -> char
+simpleType -> int
+simpleType -> str
+arrayType -> arr[ simpleType unsignedNumber ]
+iostmt -> read ( identifier )
+iostmt -> print ( identifierList )
+iostmt -> print ( const )
+identifierList -> identifier
+identifierList -> identifier , identifierList
+simpleAssignOp -> :=
+specialAssignOp -> +:=
+specialAssignOp -> -:=
+simpleAssign -> identifier simpleAssignOp expression
+specialAssign -> identifier specialAssignOp const
+assignstmt -> simpleAssign
+assignstmt -> specialAssign
+expression -> expression secOrdOp term
+expression -> term
+secOrdOp -> +
+secOrdOp -> -
+term -> term firstOrdOp factor
+term -> factor
+firstOrdOp -> *
+firstOrdOp -> /
+factor -> ( expression)
+factor -> identifier
+factor -> arrAccess
+factor -> const
+arrAccess -> identifier [ identifier ]
+arrAccess -> identifier [ unsignedNumber ]
+structStmt -> compoundStmt
+structStmt -> ifstmt
+structStmt -> whilestmt
+structStmt -> forstmt
+compoundStmt -> { stmtList }
+ifstmt -> if compoundCond stmt else stmt
+whilestmt -> asla compoundCond stmt
+compoundCond -> condition
+compoundCond -> condition logicOp compoundCond
+logicOp -> &
+condition -> expression relation expression
+relation -> =
+relation -> ==
+relation -> !=
+relation -> =
+forstmt -> for[ initStmt , compoundCond , operationAssignStmt ] stmt
+initStmt -> identifier = const
+operationAssignStmt -> identifier specialAssignOp const
+identifier -> ~ sequence
+sequence -> character
+sequence -> character sequence
+character -> letter
+character -> digit
+letter -> A
+letter -> B
+letter -> C
+letter -> D
+letter -> E
+letter -> F
+letter -> G
+letter -> H
+letter -> I
+letter -> J
+letter -> K
+letter -> L
+letter -> M
+letter -> N
+letter -> O
+letter -> P
+letter -> Q
+letter -> R
+letter -> S
+letter -> T
+letter -> U
+letter -> V
+letter -> W
+letter -> X
+letter -> Y
+letter -> Z
+letter -> a
+letter -> b
+letter -> c
+letter -> d
+letter -> e
+letter -> f
+letter -> g
+letter -> h
+letter -> i
+letter -> j
+letter -> k
+letter -> l
+letter -> m
+letter -> n
+letter -> o
+letter -> p
+letter -> q
+letter -> r
+letter -> s
+letter -> t
+letter -> u
+letter -> v
+letter -> w
+letter -> x
+letter -> y
+letter -> z
+digit -> 1
+digit -> 2
+digit -> 3
+digit -> 4
+digit -> 5
+digit -> 6
+digit -> 7
+digit -> 8
+digit -> 9
+sign -> -
+sign -> +
+zero -> 0
+nonzeroDigit -> 1
+nonzeroDigit -> 2
+nonzeroDigit -> 3
+nonzeroDigit -> 4
+nonzeroDigit -> 5
+nonzeroDigit -> 6
+nonzeroDigit -> 7
+nonzeroDigit -> 8
+nonzeroDigit -> 9
+digit_seq -> digit
+digit_seq -> digit digit_seq
+unsignedNumber -> nonzeroDigit
+unsignedNumber -> nonzeroDigit digit_seq
+int -> zero
+int -> sign unsignedNumber
+int -> unsignedNumber
+strSequence -> chr
+strSequence -> chr strSequence
+chr -> letter
+chr -> digit
+chr -> .
+str -> " strSequence "
+char -> ' character '

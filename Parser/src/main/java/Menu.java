@@ -2,26 +2,28 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 public class Menu {
 
     public static void printMenu() {
-        System.out.println("""
+        System.out.print("""
                 1 - read grammar from file
                 2 - print non-terminals
                 3 - print terminals
                 4 - print productions
-                5 - print productions for terminal
+                5 - print productions for non-terminal
                 6 - check CFG
                 0 - exit
-                >>>""");
+                >>>\040""");
     }
+
 
 
     public static void main(String[] args) {
         var grammar = new Grammar();
         try {
-            grammar.readFromFile("g1.txt");
+            grammar.readFromFile(Objects.requireNonNull(Menu.class.getResource("g1.txt")).getFile());
         } catch (ReadGrammarException e) {
             e.printStackTrace();
         }
@@ -40,11 +42,11 @@ public class Menu {
             }
             switch (option) {
                 case "1" -> {
-                    System.out.println("file >> ");
+                    System.out.print("file >> ");
                     String file = "";
                     try {
                         file = reader.readLine();
-                        grammar.readFromFile(file);
+                        grammar.readFromFile(Objects.requireNonNull(Menu.class.getResource(file)).getFile());
                     } catch (IOException | ReadGrammarException e) {
                         e.printStackTrace();
                     }
@@ -56,10 +58,10 @@ public class Menu {
                     System.out.println(grammar.getTerminals());
                 }
                 case "4" -> {
-                    System.out.println(grammar.getProductions());
+                    System.out.println(grammar.getProductions().stream().map(Production::toString).collect(Collectors.joining("\n")));
                 }
                 case "5" -> {
-                    System.out.println("non-terminal >> ");
+                    System.out.print("non-terminal >> ");
                     String terminal = "";
                     try {
                         terminal = reader.readLine();
