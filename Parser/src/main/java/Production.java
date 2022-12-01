@@ -21,9 +21,9 @@ public class Production {
     @Override
     public String toString() {
         return left.stream().map(Object::toString)
-                .collect(Collectors.joining("")) +
-                "->" +
+                .collect(Collectors.joining(" ")) +
+                " -> " +
                 right.stream().map(Object::toString)
-                        .collect(Collectors.joining(""));
+                        .collect(Collectors.joining(" "));
     }
 }
