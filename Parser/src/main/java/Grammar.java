@@ -23,7 +23,14 @@ public class Grammar {
 
     }
 
-    private boolean isNonTerminal(String label){
+    public void enhance() {
+        var oldInitial = this.initialSymbol;
+        this.initialSymbol = new NonTerminal(this.initialSymbol.getLabel() + "'");
+        this.productions.add(new Production(List.of(initialSymbol), List.of(oldInitial)));
+        this.nonTerminals.add(this.initialSymbol);
+    }
+
+    public boolean isNonTerminal(String label) {
         return this.nonTerminals.stream().map(NonTerminal::getLabel).anyMatch(l -> Objects.equals(label, l));
     }
 
@@ -33,15 +40,13 @@ public class Grammar {
         for (var i = 0; i < productions.size(); i++) {
             production = productions.get(i);
             splittedProduction = splitProduction(production);
-            System.out.println(splittedProduction.getFirst());
-            System.out.println(splittedProduction.getSecond());
-            for (String leftSymbol: splittedProduction.getFirst()) {
-                if(!isNonTerminal(leftSymbol)){
+            for (String leftSymbol : splittedProduction.getFirst()) {
+                if (!isNonTerminal(leftSymbol)) {
                     throw new ReadGrammarException("Terminal in left side of production.");
                 }
             }
             this.productions.add(new Production(splittedProduction.getFirst().stream().map(NonTerminal::new).collect(Collectors.toList()), splittedProduction.getSecond().stream().map(Symbol::new).collect(Collectors.toList())));
-            System.out.println(this.productions);
+
         }
     }
 
@@ -94,5 +99,11 @@ public class Grammar {
         var nonTerminal = searchValue.get();
 
         return productions.stream().filter(p -> p.getLeftForCFG().equals(nonTerminal)).collect(Collectors.toList());
+    }
+
+    public List<Symbol> getAllSymbols() {
+        List<Symbol> symbols = new ArrayList<>(this.nonTerminals);
+        symbols.addAll(this.terminals);
+        return symbols;
     }
 }
