@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.*;
-import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 @Getter
@@ -14,7 +13,6 @@ public class Grammar {
     private List<NonTerminal> nonTerminals;
     private List<Terminal> terminals;
     private List<Production> productions = new ArrayList<>();
-
 
     private Pair<List<String>, List<String>> splitProduction(String production) {
         List<String> splittedProduction = List.of(production.split("->"));

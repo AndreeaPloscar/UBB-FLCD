@@ -74,4 +74,15 @@ public class TestParser {
         parser.printStatesString();
 
     }
+
+    @Test
+    public void testParsingTable() {
+        parser = new Parser(grammar);
+        try {
+            parser.generateParsingTable();
+        } catch (ParsingTableConflictException e) {
+            System.out.println(e.getMessage());
+        }
+        System.out.println(parser.getTable());
+    }
 }
