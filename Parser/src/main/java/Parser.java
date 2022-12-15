@@ -3,10 +3,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @AllArgsConstructor
@@ -16,6 +13,7 @@ import java.util.stream.Collectors;
 public class Parser {
 
     private Grammar grammar;
+    private ParsingTable table;
 
     private void enhanceGrammar() {
         grammar.enhance();
@@ -86,6 +84,56 @@ public class Parser {
                 }
             }
             this.states = newStates;
+        }
+    }
+
+    private Integer findState(Set<Item> state){
+        for(var index = 0; index < this.states.size(); index++){
+            if(this.states.get(index).equals(state)){
+                return index;
+            }
+        }
+        return -1;
+    }
+
+    public void generateParsingTable() throws ParsingTableConflictException {
+        this.generateCanonicalCollection();
+        this.table = new ParsingTable(grammar.getAllSymbols(), this.states.size());
+        for (var index = 0; index < states.size(); index ++) {
+            var state = states.get(index);
+            var actions = new HashMap<Item, String>();
+            for(var item: state){
+                if(item.getInput().isEmpty()){
+                    if(item.getLeft().equals(grammar.getInitialSymbol())){
+                        actions.put(item, "accept");
+                    }else{
+                        for(int i = 0; i < grammar.getProductions().size(); i++){
+                            var prod = grammar.getProductions().get(i);
+                            if(prod.getLeftForCFG().equals(item.getLeft()) && prod.right.equals(item.getWork())){
+                                actions.put(item, "reduce" + (i+1));
+                                break;
+                            }
+                        }
+                    }
+                }else{
+                    actions.put(item, "shift");
+                }
+            }
+            var action = actions.entrySet().iterator().next().getValue();
+            for (var a: actions.keySet()){
+                if(!actions.get(a).equals(action)){
+                    throw new ParsingTableConflictException(a.toString() + "has action " + actions.get(a) + " conflicts " + action);
+                }
+            }
+            table.getRows().get(index).setAction(action);
+
+            for(var symbol: grammar.getAllSymbols()){
+                var goToResult = goTo(state, symbol);
+                var goToState = this.findState(goToResult);
+                if(goToState != -1){
+                    table.setGoToSymbol(index, symbol, goToState);
+                }
+            }
         }
     }
 
