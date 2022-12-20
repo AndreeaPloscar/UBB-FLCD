@@ -1,6 +1,5 @@
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.jupiter.api.BeforeEach;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -73,6 +72,21 @@ public class TestParser {
 
         parser.printStatesString();
 
+    }
+
+    @Test
+    public void testParse(){
+        parser = new Parser(grammar);
+        try {
+            var seq = new ArrayList<String>();
+            seq.add("a");
+            seq.add("b");
+            seq.add("c");
+            parser.parse(seq);
+        } catch (ParsingTableConflictException e) {
+            System.out.println(e.getMessage());
+        }
+        System.out.println(parser.getTable());
     }
 
     @Test

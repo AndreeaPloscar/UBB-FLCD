@@ -30,6 +30,15 @@ public class ParsingTableRow {
         }
     }
 
+    public Integer getGoToState(String symbol){
+        for (var s: goTo) {
+            if(s.getFirst().getLabel().equals(symbol)){
+                return s.getSecond();
+            }
+        }
+        return null;
+    }
+
     @Override
     public String toString() {
         var stringBuilder = new StringBuilder();

@@ -14,6 +14,9 @@ public class Parser {
 
     private Grammar grammar;
     private ParsingTable table;
+    Stack<Object> workingStack = new Stack<>();
+    Stack<String> inputStack = new Stack();
+    Stack<Integer> outputStack = new Stack<>();
 
     private void enhanceGrammar() {
         grammar.enhance();
@@ -87,9 +90,9 @@ public class Parser {
         }
     }
 
-    private Integer findState(Set<Item> state){
-        for(var index = 0; index < this.states.size(); index++){
-            if(this.states.get(index).equals(state)){
+    private Integer findState(Set<Item> state) {
+        for (var index = 0; index < this.states.size(); index++) {
+            if (this.states.get(index).equals(state)) {
                 return index;
             }
         }
@@ -99,42 +102,80 @@ public class Parser {
     public void generateParsingTable() throws ParsingTableConflictException {
         this.generateCanonicalCollection();
         this.table = new ParsingTable(grammar.getAllSymbols(), this.states.size());
-        for (var index = 0; index < states.size(); index ++) {
+        for (var index = 0; index < states.size(); index++) {
             var state = states.get(index);
             var actions = new HashMap<Item, String>();
-            for(var item: state){
-                if(item.getInput().isEmpty()){
-                    if(item.getLeft().equals(grammar.getInitialSymbol())){
+            for (var item : state) {
+                if (item.getInput().isEmpty()) {
+                    if (item.getLeft().equals(grammar.getInitialSymbol())) {
                         actions.put(item, "accept");
-                    }else{
-                        for(int i = 0; i < grammar.getProductions().size(); i++){
+                    } else {
+                        for (int i = 0; i < grammar.getProductions().size(); i++) {
                             var prod = grammar.getProductions().get(i);
-                            if(prod.getLeftForCFG().equals(item.getLeft()) && prod.right.equals(item.getWork())){
-                                actions.put(item, "reduce" + (i+1));
+                            if (prod.getLeftForCFG().equals(item.getLeft()) && prod.right.equals(item.getWork())) {
+                                actions.put(item, "reduce" + (i + 1));
                                 break;
                             }
                         }
                     }
-                }else{
+                } else {
                     actions.put(item, "shift");
                 }
             }
             var action = actions.entrySet().iterator().next().getValue();
-            for (var a: actions.keySet()){
-                if(!actions.get(a).equals(action)){
+            for (var a : actions.keySet()) {
+                if (!actions.get(a).equals(action)) {
                     throw new ParsingTableConflictException(a.toString() + "has action " + actions.get(a) + " conflicts " + action);
                 }
             }
             table.getRows().get(index).setAction(action);
 
-            for(var symbol: grammar.getAllSymbols()){
+            for (var symbol : grammar.getAllSymbols()) {
                 var goToResult = goTo(state, symbol);
                 var goToState = this.findState(goToResult);
-                if(goToState != -1){
+                if (goToState != -1) {
                     table.setGoToSymbol(index, symbol, goToState);
                 }
             }
         }
+    }
+
+    private void actionShift() {
+
+    }
+
+    private void actionReduce() {
+
+    }
+
+
+    public void parse(List<String> sequence) throws ParsingTableConflictException {
+        this.generateParsingTable();
+        var state = 0;
+        Collections.reverse(sequence);
+        inputStack.addAll(sequence);
+        workingStack.push(state);
+        var done = false;
+        do {
+            if (Objects.equals(table.getRows().get(state).getAction(), "shift")) {
+                actionShift();
+            } else {
+                if (table.getRows().get(state).getAction().startsWith("reduce")) {
+                    actionReduce();
+                } else {
+                    if (Objects.equals(table.getRows().get(state).getAction(), "accept")) {
+                        System.out.println("success!");
+                        System.out.println(outputStack);
+                        done = true;
+                    } else {
+                        System.out.println("erorr!");
+                        done = true;
+                    }
+                }
+            }
+        } while (!done);
+
+
     }
 
     public void printStatesString() {
