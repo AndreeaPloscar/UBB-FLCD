@@ -17,6 +17,7 @@ public class Parser {
     Stack<Object> workingStack = new Stack<>();
     Stack<String> inputStack = new Stack();
     Stack<Integer> outputStack = new Stack<>();
+    List<Node> tree = new ArrayList<>();
 
     private void enhanceGrammar() {
         grammar.enhance();
@@ -141,13 +142,72 @@ public class Parser {
     }
 
     private void actionShift() {
-
+        var currentState = workingStack.peek();
+        var currentSymbol = inputStack.peek();
+        var goToState = table.getRows().get(currentState).getGoToState(currentSymbol);
+        inputStack.pop();
+        workingStack.push(currentSymbol);
+        workingStack.push(goToState);
     }
 
     private void actionReduce() {
+        var currentState = workingStack.peek();
+        var productionPos = Integer.parseInt(table.getRows().get(currentState).getAction().substring(6));
+        var production = grammar.getProductions().get(productionPos - 1);
+        var symbols = new ArrayList<>(production.getRight());
+        var symbolsStack = new Stack<Symbol>();
+        symbolsStack.addAll(symbols);
+        while (!symbolsStack.isEmpty()) {
+            try {
+                var currentS = workingStack.pop();
+                if (currentS.equals(symbolsStack.peek().getLabel())) {
+                    symbolsStack.pop();
+                }
+            } catch (Exception e) {
+                System.out.println("e");
+            }
 
+        }
+        var newState = (int) workingStack.peek();
+        var newSymbol = production.getLeftForCFG().getLabel();
+        var goToState = table.getRows().get(newState).getGoToState(newSymbol);
+        workingStack.push(newSymbol);
+        workingStack.push(goToState);
+        outputStack.push(productionPos);
     }
 
+    public void printTree() {
+        this.createTree();
+        for (var node : tree) {
+            System.out.println(node);
+        }
+    }
+
+    private void createTree() {
+        var output = new ArrayList<>(outputStack);
+        var productions = new Stack<Integer>();
+        productions.addAll(output);
+        var startingSymbol = grammar.getProductions().get(0).getLeftForCFG();
+        tree.add(Node.builder().index(1).info(startingSymbol.getLabel()).parent(0).rightSibling(0).build());
+        while (!productions.isEmpty()) {
+            var pos = productions.pop();
+            var symbols = new ArrayList<>(grammar.getProductions().get(pos - 1).getRight());
+            var firstNonTerminal = 0;
+            for (var node : tree) {
+                if (grammar.isNonTerminal(node.getInfo())) {
+                    firstNonTerminal = node.getIndex();
+                }
+            }
+            Collections.reverse(symbols);
+            var index = tree.size() + 1;
+            var isFirst = true;
+            for (var s : symbols) {
+                tree.add(Node.builder().index(index).info(s.getLabel()).parent(firstNonTerminal).rightSibling(isFirst ? 0 : index - 1).build());
+                index += 1;
+                isFirst = false;
+            }
+        }
+    }
 
     public void parse(List<String> sequence) throws ParsingTableConflictException {
         this.generateParsingTable();
@@ -157,6 +217,7 @@ public class Parser {
         workingStack.push(state);
         var done = false;
         do {
+            state = (int) workingStack.peek();
             if (Objects.equals(table.getRows().get(state).getAction(), "shift")) {
                 actionShift();
             } else {
@@ -165,7 +226,9 @@ public class Parser {
                 } else {
                     if (Objects.equals(table.getRows().get(state).getAction(), "accept")) {
                         System.out.println("success!");
-                        System.out.println(outputStack);
+                        var output = new ArrayList<>(outputStack);
+                        Collections.reverse(output);
+                        System.out.println(output);
                         done = true;
                     } else {
                         System.out.println("erorr!");

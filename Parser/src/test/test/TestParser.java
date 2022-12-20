@@ -75,14 +75,17 @@ public class TestParser {
     }
 
     @Test
-    public void testParse(){
+    public void testParse() {
         parser = new Parser(grammar);
         try {
             var seq = new ArrayList<String>();
             seq.add("a");
             seq.add("b");
+            seq.add("b");
             seq.add("c");
             parser.parse(seq);
+            parser.printTree();
+
         } catch (ParsingTableConflictException e) {
             System.out.println(e.getMessage());
         }
