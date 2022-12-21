@@ -1,10 +1,7 @@
 import org.junit.Before;
 import org.junit.Test;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
-import java.util.Set;
+import java.util.*;
 
 import static org.junit.Assert.*;
 
@@ -85,7 +82,12 @@ public class TestParser {
             seq.add("c");
             parser.parse(seq);
             parser.printTree();
-
+            var expected = new Stack<Integer>();
+            expected.push(3);
+            expected.push(2);
+            expected.push(2);
+            expected.push(1);
+            assertEquals(parser.outputStack, expected);
         } catch (ParsingTableConflictException e) {
             System.out.println(e.getMessage());
         }
