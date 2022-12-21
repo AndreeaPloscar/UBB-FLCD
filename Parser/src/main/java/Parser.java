@@ -126,7 +126,7 @@ public class Parser {
             var action = actions.entrySet().iterator().next().getValue();
             for (var a : actions.keySet()) {
                 if (!actions.get(a).equals(action)) {
-                    throw new ParsingTableConflictException(a.toString() + "has action " + actions.get(a) + " conflicts " + action);
+                    throw new ParsingTableConflictException(state + "has action " + actions.get(a) + "on item" + a.toString() + " conflicts " + action + "\n");
                 }
             }
             table.getRows().get(index).setAction(action);
@@ -171,7 +171,9 @@ public class Parser {
         var newState = (int) workingStack.peek();
         var newSymbol = production.getLeftForCFG().getLabel();
         var goToState = table.getRows().get(newState).getGoToState(newSymbol);
+        System.out.println("Reduce newstate " + newState + " go to: " + goToState + " new symbol: " + newSymbol);
         workingStack.push(newSymbol);
+
         workingStack.push(goToState);
         outputStack.push(productionPos);
     }
@@ -192,17 +194,17 @@ public class Parser {
         while (!productions.isEmpty()) {
             var pos = productions.pop();
             var symbols = new ArrayList<>(grammar.getProductions().get(pos - 1).getRight());
-            var firstNonTerminal = 0;
+            var lastNonTerminal = 0;
             for (var node : tree) {
                 if (grammar.isNonTerminal(node.getInfo())) {
-                    firstNonTerminal = node.getIndex();
+                    lastNonTerminal = node.getIndex();
                 }
             }
             Collections.reverse(symbols);
             var index = tree.size() + 1;
             var isFirst = true;
             for (var s : symbols) {
-                tree.add(Node.builder().index(index).info(s.getLabel()).parent(firstNonTerminal).rightSibling(isFirst ? 0 : index - 1).build());
+                tree.add(Node.builder().index(index).info(s.getLabel()).parent(lastNonTerminal).rightSibling(isFirst ? 0 : index - 1).build());
                 index += 1;
                 isFirst = false;
             }
@@ -217,7 +219,11 @@ public class Parser {
         workingStack.push(state);
         var done = false;
         do {
-            state = (int) workingStack.peek();
+            try {
+                state = (int) workingStack.peek();
+            }catch (Exception e){
+                System.out.println("e");
+            }
             if (Objects.equals(table.getRows().get(state).getAction(), "shift")) {
                 actionShift();
             } else {

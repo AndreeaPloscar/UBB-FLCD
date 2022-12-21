@@ -74,23 +74,18 @@ public class TestParser {
     @Test
     public void testParse() {
         parser = new Parser(grammar);
+        var seq = new ArrayList<>(List.of("a", "b","b", "c"));
+//        var seq = new ArrayList<>(List.of("if", "1", "<", "2", "print", "(", "A", ")", "else", "print", "(", "B", ")"));
         try {
-            var seq = new ArrayList<String>();
-            seq.add("a");
-            seq.add("b");
-            seq.add("b");
-            seq.add("c");
             parser.parse(seq);
-            parser.printTree();
-            var expected = new Stack<Integer>();
-            expected.push(3);
-            expected.push(2);
-            expected.push(2);
-            expected.push(1);
-            assertEquals(parser.outputStack, expected);
-        } catch (ParsingTableConflictException e) {
-            System.out.println(e.getMessage());
+        } catch (Exception e) {
+            e.printStackTrace();
         }
+        parser.printTree();
+        var expected = new Stack<Integer>();
+        expected.addAll(List.of(3,2,2, 1));
+//        expected.addAll(List.of(80, 89, 92, 7, 11, 81, 89, 92, 7, 6, 16, 15, 14, 2, 17, 15, 14, 2, 5, 4, 3, 1));
+        assertEquals(parser.outputStack, expected);
         System.out.println(parser.getTable());
     }
 

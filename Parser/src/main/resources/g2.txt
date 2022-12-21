@@ -3,7 +3,6 @@ sign type int firstOrdOp operationAssignStmt zero whilestmt declaration compound
 program
 program -> # stmtList #
 stmtList -> stmt
-stmtList -> stmt stmtList
 stmt -> simpleStmt
 stmt -> structStmt
 simpleStmt -> declaration
@@ -24,7 +23,6 @@ iostmt -> read ( identifier )
 iostmt -> print ( identifierList )
 iostmt -> print ( const )
 identifierList -> identifier
-identifierList -> identifier , identifierList
 simpleAssignOp -> :=
 specialAssignOp -> +:=
 specialAssignOp -> -:=
@@ -32,20 +30,16 @@ simpleAssign -> identifier simpleAssignOp expression
 specialAssign -> identifier specialAssignOp const
 assignstmt -> simpleAssign
 assignstmt -> specialAssign
-expression -> expression secOrdOp term
-expression -> term
 secOrdOp -> +
 secOrdOp -> -
 term -> term firstOrdOp factor
 term -> factor
 firstOrdOp -> *
 firstOrdOp -> /
-factor -> ( expression)
+factor -> (expression)
 factor -> identifier
 factor -> arrAccess
 factor -> const
-arrAccess -> identifier [ identifier ]
-arrAccess -> identifier [ unsignedNumber ]
 structStmt -> compoundStmt
 structStmt -> ifstmt
 structStmt -> whilestmt
@@ -54,7 +48,6 @@ compoundStmt -> { stmtList }
 ifstmt -> if compoundCond stmt else stmt
 whilestmt -> asla compoundCond stmt
 compoundCond -> condition
-compoundCond -> condition logicOp compoundCond
 logicOp -> &
 condition -> expression relation expression
 relation -> =
@@ -66,7 +59,6 @@ initStmt -> identifier = const
 operationAssignStmt -> identifier specialAssignOp const
 identifier -> ~ sequence
 sequence -> character
-sequence -> character sequence
 character -> letter
 character -> digit
 letter -> A
@@ -145,7 +137,6 @@ nonzeroDigit -> 9
 digit_seq -> digit
 digit_seq -> digit digit_seq
 unsignedNumber -> nonzeroDigit
-unsignedNumber -> nonzeroDigit digit_seq
 int -> zero
 int -> sign unsignedNumber
 int -> unsignedNumber
