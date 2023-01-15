@@ -81,10 +81,28 @@ public class TestParser {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        parser.printTree();
+        parser.printTree("out1.txt");
         var expected = new Stack<Integer>();
         expected.addAll(List.of(3,2,2, 1));
 //        expected.addAll(List.of(80, 89, 92, 7, 11, 81, 89, 92, 7, 6, 16, 15, 14, 2, 17, 15, 14, 2, 5, 4, 3, 1));
+        assertEquals(parser.outputStack, expected);
+        System.out.println(parser.getTable());
+    }
+
+    @Test
+    public void testParsePIF() {
+        parser = new Parser(grammar);
+//        var seq = new ArrayList<>(List.of("a", "b","b", "c"));
+//        var seq = new ArrayList<>(List.of("if", "1", "<", "2", "print", "(", "A", ")", "else", "print", "(", "B", ")"));
+        try {
+            parser.parsePIF("pif.out");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        parser.printTree("out2.txt");
+        var expected = new Stack<Integer>();
+//        expected.addAll(List.of(3,2,2, 1));
+        expected.addAll(List.of(7, 11, 7, 6, 15, 14, 2, 15, 14, 2, 5, 4, 3, 1));
         assertEquals(parser.outputStack, expected);
         System.out.println(parser.getTable());
     }

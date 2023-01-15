@@ -1,0 +1,100 @@
+Symbol:
+    - label: name of a Symbol, provides unicity
+    Has Terminal and NonTerminal as subtypes
+
+Production:
+    - left: List<NonTerminal> (length 1 for context free grammar)
+    - right: List<Symbol> (can contain nonterminals and terminals)
+    + toString: format "A -> aBb" eg
+
+ReadGrammarException: used in reading grammar
+ParsingTableConflictException: used to identify conflicts in the parsing table which 
+    signals a grammar that is not LR(0)
+
+
+Grammar:
+    - initialSymbol: NonTerminal
+    - nonTerminals: List<NonTerminal>
+    - terminals: List<Terminal>
+    - productions: List<Production>
+    - splitProduction(production: String): Pair<List<String>, List<String>>
+        separates LHS symbols and RHS symbols into lists
+    + enhance()
+        adds new starting symbol
+    + isCFG(): boolean
+        verifies if there is no production in the grammar with more than one
+        symbol in the LHS
+
+Item: represents [left -> work . input], the item for LR(0)
+    - left: Symbol
+    - work: List<Symbol>
+    - input: List<Symbol>
+    + moveDot(): Item
+        creates new Item by moving the dot one symbol to the right
+    + isSymbolFirstInInput(symbol: Symbol): boolean
+        checks whether the symbol is at the top of the input stack
+    
+
+Node: used in the parsing tree table representation
+
+ParsingTableRow: used to store action for a state and gotos for each symbol in the symbols list
+    - action: String
+    - symbols: List<Symbol> (table header)
+    - goTo: List<Pair<Symbol, Integer>>
+
+ParsingTable:
+    - symbols: List<Symbol> (header)
+    - numberOfStates: Integer (lines)
+    - rows: Map<Integer, ParsingTableRow> (one row for each state)
+
+Parser:
+    - grammar: Grammar
+    - table: ParsingTable
+    - workingStack: Stack<Object>
+    - inputStack: Stack<Object>
+    - outputStack: Stack<Object>
+    - tree: List<Node>
+    - states: List<Set<item>>
+
+    public Set<Item> closure(Set<Item> items)
+        computes closure over a set of itmes (a state)
+        iterates over the state as long as it can add new items using existing ones
+            (having nonterminals as the first item in the input stack)
+    
+    public Set<Item> goTo(Set<Item> state, Symbol symbol)
+        creates the state obtained with goto(state, symbol)
+        return the closure of the set of itmes from the state having the symbol
+            as the first symbol on the input stack
+
+    public void generateCanonicalCollection() 
+        ehnances grammar
+        adds initial state
+        iterates over the existing states and creates new ones
+            using goto defined above as long as the set of states grows
+
+    public void generateParsingTable() throws ParsingTableConflictException
+        generates canonical collection
+        generates pasring table by adding the corresponding actions and
+            goto states for each symbol in the table and each state in 
+            the canonical collection
+
+    private void actionShift()
+        applies shift on the current state from the work stack and symbol from input
+
+    private void actionReduce()
+        applies reduce on the current state from the work stack
+        modifies working and output stacks accordingly
+
+    private void createTree()
+        creates the table representation for the parsing tree starting
+            from the string of productions
+
+    public void parse(List<String> sequence) throws ParsingTableConflictException
+        generates parsing table
+        applies the corresponding actions for each step (shift, reduce)
+        accepts the sequence when the acction is "accept"
+        prints error if cell in the table is empty
+    
+    
+
+

@@ -3,6 +3,11 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -178,11 +183,23 @@ public class Parser {
         outputStack.push(productionPos);
     }
 
-    public void printTree() {
+    public void printTree(String filename) {
         this.createTree();
+        var stringBuilder = new StringBuilder();
         for (var node : tree) {
             System.out.println(node);
+            stringBuilder.append(node).append("\n");
         }
+        try {
+            FileWriter myWriter = new FileWriter(filename);
+            myWriter.write(stringBuilder.toString());
+            myWriter.close();
+            System.out.println("Successfully wrote to the file.");
+        } catch (IOException e) {
+            System.out.println("An error occurred.");
+            e.printStackTrace();
+        }
+
     }
 
     private void createTree() {
@@ -221,7 +238,7 @@ public class Parser {
         do {
             try {
                 state = (int) workingStack.peek();
-            }catch (Exception e){
+            } catch (Exception e) {
                 System.out.println("e");
             }
             if (Objects.equals(table.getRows().get(state).getAction(), "shift")) {
@@ -244,7 +261,28 @@ public class Parser {
             }
         } while (!done);
 
+    }
 
+    public void parsePIF(String filepath) {
+        List<String> sequence = new ArrayList<>();
+
+        Path file = Paths.get(Objects.requireNonNull(Menu.class.getResource(filepath)).getFile());
+        Scanner fileScanner;
+        List<String> lines = new ArrayList<>();
+        try {
+            fileScanner = new Scanner(file);
+            while (fileScanner.hasNextLine()) {
+                sequence.add(fileScanner.nextLine().split(" ")[0]);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        try {
+            parse(sequence);
+        } catch (ParsingTableConflictException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     public void printStatesString() {
