@@ -1,0 +1,22 @@
+#
+var ~a :: int
+var ~b :: int
+var ~c :: int
+var ~d :: str = 'Maxnumberis'
+print("Input.a")
+read(~a)
+print("Input.b")
+read(~b)
+print("Input.c")
+read(~c)
+
+if ~a > ~b &@ ~a > ~c{
+	print(~d, ~a)
+}else{
+	if ~b > ~a & ~b > ~c{
+		print(~d, ~b)
+	}else{
+		print(~d, ~c)
+	}
+}
+#

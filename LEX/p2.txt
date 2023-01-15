@@ -1,0 +1,14 @@
+#
+var ~a :: int
+var ~d :: int = 2
+var ~prime :: int = 1
+
+asla[~d < ~a/2]{
+	if ~a % ~d == 0{
+		~prime := 0
+	}
+	~d +:= 1
+}
+
+print("Prime", ~prime)
+#

@@ -1,0 +1,140 @@
+%{ 
+#include <stdio.h>
+#include <string.h>
+#include <stdlib.h>
+
+struct PifElement {
+    char *token;
+    int position;
+};
+
+char** st;
+int stLength = 20;
+int stCurrent = 0;
+
+int line = 0;
+
+struct PifElement* pif;
+int pifLength = 20;
+int pifCurrent = 0;
+
+void initializeSt(){
+    st = malloc(stLength * sizeof(char*));
+}
+
+void initializePif(){
+    pif = malloc(pifLength * sizeof(struct PifElement));
+}
+
+void resizeSt(){
+    int newStLength = 2 * stLength;
+    char** newSt = malloc(newStLength * sizeof(char*));
+    for(int i = 0; i < stLength; i++){
+        newSt[i] = st[i];
+    }
+    stLength = newStLength;
+    free(st);
+    st = newSt;
+}
+
+void resizePif(){
+    int newPifLength = 2 * pifLength;
+    struct PifElement* newPif = malloc(newPifLength * sizeof(struct PifElement));
+    for(int i = 0; i < pifLength; i++){
+        newPif[i] = pif[i];
+    }
+    pifLength = newPifLength;
+    free(pif);
+    pif = newPif;
+}
+
+int getTokenPosition(char* token){
+    for(int pos = 0; pos < stCurrent; pos++){
+        if(strcmp(st[pos], token) == 0){
+            return pos;
+        }
+    }
+    return -1;
+}
+
+int addToSt(char* token){
+    int pos = getTokenPosition(token);
+    if(pos != -1){
+        return pos;
+    }
+    if(stLength == stCurrent){
+       resizeSt();
+    }
+    st[stCurrent] = token;
+    stCurrent++;
+    return stCurrent - 1;
+}
+
+void addToPif(struct PifElement element){
+    if(pifCurrent == pifLength){
+        resizePif();
+    }
+    pif[pifCurrent++] = element;
+}
+
+struct PifElement createPifElement(char* token, int position){
+    struct PifElement element;
+    element.token = token;
+    element.position = position;
+    return element;
+}
+
+char* deepCopy(char *string) {
+    int len = (int)strlen(string);
+    char* copy = malloc((len+1) * sizeof(char));
+    for (int i = 0; i <= len; ++i)
+        copy[i] = string[i];
+    return copy;
+}
+
+%}
+
+
+%option noyywrap
+%option caseless
+
+
+STRING		\"[a-zA-Z.0-9]*\"
+CHAR 		\'[a-zA-Z.0-9]\'
+INTEGER 	[+\-]?[1-9][0-9]*|0
+CONST 		{STRING}|{CHAR}|{INTEGER}
+id 		    ~[a-zA-Z0-9]+
+
+%%
+
+"arr"|"int"|"str"|"char"|"print"|"read"|"if"|"else"|"asla"|"var"|"for"|"const" 	{printf( "A keyword: %s\n", yytext ); char* token=deepCopy(yytext); addToPif(createPifElement(token, -1));}  
+{id}      {printf("An identifier %s\n", yytext); char* id=deepCopy(yytext); addToPif(createPifElement("ID", addToSt(id))); }
+{CONST}      {printf("A constant %s\n", yytext); char* c=deepCopy(yytext); addToPif(createPifElement("CONST", addToSt(c))); }
+"+"|"-"|"/"|"*"|"%"|"<"|"<="|">"|">="|"=="|"="|"::"|"|"|"&"|":="|"+:="|"-:="|"!=" {printf("An operator %s\n", yytext); char* token=deepCopy(yytext); addToPif(createPifElement(token, -1));}
+"["|"]"|"("|")"|"{"|"}"|":"|";"|","|"#"  {printf("A separator %s\n", yytext); char* token=deepCopy(yytext); addToPif(createPifElement(token, -1)); }
+[ \t]+ 		/* whitespace */  
+[\n]+ {++line;}
+. {printf("Error: token %s on line %d is unmatched\n", yytext, line); exit(1);}
+%%
+int main( argc, argv ) 
+int argc; 
+char **argv; 
+{ 
+    ++argv, --argc; /* skip over program name */ 
+    if ( argc > 0 ) 
+    yyin = fopen( argv[0], "r" ); 
+    else 
+     yyin = stdin; 
+    initializePif();
+    initializeSt();
+    yylex(); 
+    printf("ST:");
+    for(int i = 0; i < stCurrent; i++){
+        printf("pos %d: %s\n", i, st[i]);
+    }
+    printf("PIF:");
+    for(int i = 0; i < pifCurrent; i++){
+        printf("pos %d: %s\n", pif[i].position, pif[i].token);
+    }
+
+} 

@@ -1,0 +1,22 @@
+#
+var ~a :: int
+var ~a :: int
+var ~c :: int
+var ~d :: str = "Max.number.is"
+print("Input.a")
+read(~a)
+print("Input.b")
+read(~b)
+print("Input.b")
+read(~c)
+
+if ~a > ~b & ~a >= ~c{
+	print(~d, ~a)
+}else{
+	if ~b > ~a & ~b > ~c{
+		print(~d, ~b)
+	}else{
+		print(~d, ~c)
+	}
+}
+#

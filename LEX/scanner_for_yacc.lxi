@@ -1,0 +1,66 @@
+%{ 
+#include <stdio.h>
+#include <string.h>
+#include <stdlib.h>
+#include "y.tab.h"
+
+int line = 0;
+%}
+
+%option noyywrap
+%option caseless
+
+STRING		\"[a-zA-Z.0-9]*\"
+CHAR 		\'[a-zA-Z.0-9]\'
+INTEGER 	[+\-]?[1-9][0-9]*|0
+CONST 		{STRING}|{CHAR}|{INTEGER}
+id 		    ~[a-zA-Z0-9]+
+
+%%
+
+"arr"       {printf( "A keyword: %s\n", yytext ); return ARR;}  
+"int"       {printf( "A keyword: %s\n", yytext ); return INT;}  
+"str"       {printf( "A keyword: %s\n", yytext ); return STR;}  
+"char"      {printf( "A keyword: %s\n", yytext ); return CHAR;}  
+"print"     {printf( "A keyword: %s\n", yytext ); return PRINT;}  
+"read"      {printf( "A keyword: %s\n", yytext ); return READ;}  
+"if"        {printf( "A keyword: %s\n", yytext ); return IF;}  
+"else"      {printf( "A keyword: %s\n", yytext ); return ELSE;}  
+"asla"      {printf( "A keyword: %s\n", yytext ); return ASLA;}  
+"var"       {printf( "A keyword: %s\n", yytext ); return VAR;}  
+"for"       {printf( "A keyword: %s\n", yytext ); return FOR;}  
+{id}        {printf("An identifier %s\n", yytext);  return ID;}
+{INTEGER}   {printf("An integer constant %s\n", yytext); return INTEGER; }
+{CONST}     {printf("A constant %s\n", yytext); return CONST; }
+"/"         {printf("An operator %s\n", yytext); return DIV;}
+"*"         {printf("An operator %s\n", yytext); return TIMES;}
+"%"         {printf("An operator %s\n", yytext); return MOD;}
+"<="        {printf("An operator %s\n", yytext); return LEQ;}
+"<"         {printf("An operator %s\n", yytext); return L;}
+">="        {printf("An operator %s\n", yytext); return GEQ;}
+">"         {printf("An operator %s\n", yytext); return G;}
+"=="        {printf("An operator %s\n", yytext); return EQ;}
+"="         {printf("An operator %s\n", yytext); return INITIALIZE;}
+"::"        {printf("An operator %s\n", yytext); return DECL;}
+"|"         {printf("An operator %s\n", yytext); return OR;}
+"&"         {printf("An operator %s\n", yytext); return AND;}
+":="        {printf("An operator %s\n", yytext); return ASSIGN;}
+"+:="       {printf("An operator %s\n", yytext); return ASSIGN_PLUS;}
+"-:="       {printf("An operator %s\n", yytext); return ASSIGN_MINUS;}
+"+"         {printf("An operator %s\n", yytext); return PLUS;}
+"-"         {printf("An operator %s\n", yytext); return MINUS;}
+"!="        {printf("An operator %s\n", yytext); return DIFF;}
+"["         {printf("A separator %s\n", yytext); return OPEN_SQUARE;}
+"]"         {printf("A separator %s\n", yytext); return CLOSED_SQUARE;}
+"("         {printf("A separator %s\n", yytext); return OPEN;}
+")"         {printf("A separator %s\n", yytext); return CLOSE;}
+"{"         {printf("A separator %s\n", yytext); return OPEN_BRACK;}
+"}"         {printf("A separator %s\n", yytext); return CLOSE_BRACK;}
+":"         {printf("A separator %s\n", yytext); return COLON;}
+";"         {printf("A separator %s\n", yytext); return SEMICOLON;}
+","         {printf("A separator %s\n", yytext); return COMMA;}
+"#"         {printf("A separator %s\n", yytext); return TAG;}
+[ \t]+ 		/* whitespace */  
+[\n]+ {++line;}
+. {printf("Error: token %s on line %d is unmatched\n", yytext, line); exit(1);}
+%%
